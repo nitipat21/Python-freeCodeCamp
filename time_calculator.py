@@ -1,20 +1,16 @@
 def add_time(start, duration, day=None):
   week = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
   day_index = 0
-  
-  if day:
-    count = 0
-    
-    for index in range(len(week)):
-      if week[index] == day.lower():
-        day_index = count
-      else:
-        count += 1
-  
   day_count_str = ""
   total_hour_str = ""
   total_minutes_str = ""
-  
+
+  # check option argument
+  if day:
+    for index in range(len(week)):
+      if week[index] == day.lower():
+        day_index = index
+
   # split AM/PM
   clock_format = start.split(" ")[1]
 
@@ -48,9 +44,9 @@ def add_time(start, duration, day=None):
     day_count_str = str(day_count) + " days later"
 
   # count day name
-    day_index += day_count
-    if day_index > 6:
-      day_index = day_index % 6
+  day_index += day_count
+  if day_index > 6:
+    day_index = day_index % 7
     
   # calculate clock format
   total_hour = total_hour % 24
@@ -75,9 +71,11 @@ def add_time(start, duration, day=None):
   # convert to new time
   new_time = total_hour_str + ":" + total_minutes_str + " " + clock_format
 
+  # plus day name with capitalize
   if day:
     new_time += ", " + week[day_index].capitalize()
-  
+
+  # plus day count
   if day_count > 0:
     new_time += " " + "(" + day_count_str + ")"
 
