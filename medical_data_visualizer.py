@@ -52,18 +52,16 @@ def draw_cat_plot():
     # Group and reformat the data to split it by 'cardio'. Show the counts of each feature. You will have to rename one of the columns for the catplot to work correctly.
   
     df_cat = df_cat.groupby(['variable', 'value','cardio'])['cardio'].count().reset_index(name="total")
-    print(df_cat)
     
     # Draw the catplot with 'sns.catplot()'
     # Get the figure for the output
-    fig = sns.catplot(x="variable", y="total", hue="value",kind="bar", col="cardio", data=df_cat)
-
+    fig = sns.catplot(x="variable", y="total", hue="value",kind="bar", col="cardio", data=df_cat).fig
 
     # Do not modify the next two lines
     fig.savefig('catplot.png')
     return fig
 
-
+  
 # Draw Heat Map
 def draw_heat_map():
     # Clean the data
@@ -76,16 +74,11 @@ def draw_heat_map():
     mask = np.zeros_like(corr)
     mask[np.triu_indices_from(mask)] = True
     
-
-
-
     # Set up the matplotlib figure
-    fig, ax = plt.subplots(figsize=(7, 5))
+    fig, ax = plt.subplots(figsize=None)
     
-  
     # Draw the heatmap with 'sns.heatmap()'
-    ax = sns.heatmap(corr, mask=mask, square=True)
-
+    ax = sns.heatmap(corr, center=0,vmin=-.32,vmax=.32, mask=mask, annot=True, fmt=".1f", linewidths=.5, square=True)
 
     # Do not modify the next two lines
     fig.savefig('heatmap.png')
