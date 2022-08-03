@@ -16,7 +16,7 @@ date = df.index.tolist()
 
 def draw_line_plot():
     # Draw line plot
-    plt.plot(date, value, color='red')
+    fig = plt.plot(date, value, color='red')
     plt.title('Daily freeCodeCamp Forum Page Views 5/2016-12/2019', fontsize=14)
     plt.xlabel('Value', fontsize=14)
     plt.ylabel('Date', fontsize=14)
