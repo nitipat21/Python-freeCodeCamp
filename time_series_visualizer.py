@@ -63,9 +63,24 @@ def draw_box_plot():
   
     sum_month = df_box.groupby([df_box['month']])['value'].sum()
     # Draw box plots (using Seaborn)
-    ax = sns.boxplot(x=sum_year.index, y=sum_year['value'], data=sum_year)
-    fig = ax.get_figure()
-    
+
+    # print(sum_year.index)
+    # ax = sns.boxplot(x=sum_year.index, y=sum_year['value'],              data=sum_year)
+    # fig = ax.get_figure()
+
+    df_box["Page Views"] = df_box["value"]
+    df_box["Month"] = df_box["month"]
+    df_box["Year"] = df_box["year"]
+    g = sns.PairGrid(df_box, y_vars=["Page Views"], x_vars=["Year", "Month"], palette="hls")
+
+    fig = g.fig
+    fig.set_figheight(6)
+    fig.set_figwidth(16)
+    fig.axes[0].set_ylabel('Page Views')
+    fig.axes[1].set_ylabel('Page Views')
+    fig.axes[0].set_title('Year-wise Box Plot (Trend)')
+    fig.axes[1].set_title('Month-wise Box Plot (Seasonality)')
+    plt.tight_layout()
 
     # Save image and return fig (don't change this part)
     fig.savefig('box_plot.png')
