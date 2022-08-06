@@ -24,7 +24,7 @@ def draw_line_plot():
     ax = plt.plot_date(date_format, value_list, 'r', xdate=True, ydate=False)
     plt.title('Daily freeCodeCamp Forum Page Views 5/2016-12/2019')
     plt.xlabel('Date')
-    plt.ylabel('Value')
+    plt.ylabel('Page Views')
 
     # Save image and return fig (don't change this part)
     fig.savefig('line_plot.png')
@@ -51,28 +51,24 @@ def draw_bar_plot():
     # Save image and return fig (don't change this part)
     fig.savefig('bar_plot.png')
     return fig
+  
+def fixed_boxplot(*args, label=None, **kwargs):
+  sns.boxplot(*args, **kwargs, labels=[label])
 
 def draw_box_plot():
     # Prepare data for box plots (this part is done!)
     df_box = df.copy()
     df_box.reset_index(inplace=True)
-    df_box['year'] = [pd.to_datetime(d).year for d in df_box.date]
-    df_box['month'] = [pd.to_datetime(d).strftime('%b') for d in df_box.date]
+    df_box['year'] = [pd.to_datetime(d).year for d in df_box['date']]
+    df_box['month'] = [pd.to_datetime(d).strftime('%b') for d in df_box['date']]
 
-    sum_year = df_box.groupby([df_box['year']]).sum()
-  
-    sum_month = df_box.groupby([df_box['month']])['value'].sum()
     # Draw box plots (using Seaborn)
-
-    # print(sum_year.index)
-    # ax = sns.boxplot(x=sum_year.index, y=sum_year['value'],              data=sum_year)
-    # fig = ax.get_figure()
-
-    df_box["Page Views"] = df_box["value"]
-    df_box["Month"] = df_box["month"]
-    df_box["Year"] = df_box["year"]
-    g = sns.PairGrid(df_box, y_vars=["Page Views"], x_vars=["Year", "Month"], palette="hls")
-
+    df_box.sort_values(by=['year','date'], ascending=[False, True], inplace=True)
+    df_box['Page Views'] = df_box['value']
+    df_box['Year'] = df_box['year']
+    df_box['Month'] = df_box['month']
+    g = sns.PairGrid(df_box, y_vars=["Page Views"], x_vars=["Year", "Month"])
+    g.map(fixed_boxplot)
     fig = g.fig
     fig.set_figheight(6)
     fig.set_figwidth(16)
